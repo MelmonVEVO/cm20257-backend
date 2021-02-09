@@ -1,0 +1,5 @@
+FROM node:13
+WORKDIR /api
+SHELL ["bash", "-ec"]
+
+VOLUME /api/src

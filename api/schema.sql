@@ -1,0 +1,40 @@
+CREATE DATABASE IF NOT EXISTS food_app;
+USE food_app;
+
+CREATE TABLE IF NOT EXISTS Users (
+  `id`        INT UNSIGNED NOT NULL,
+  `username`  VARCHAR(30) NOT NULL,
+  `password`  VARCHAR(72) NOT NULL,
+  `created`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`id`)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS Friends (
+  `id` INT UNSIGNED NOT NULL,
+  `user_one` INT UNSIGNED NOT NULL,
+  `user_two` INT UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`),
+  FOREIGN KEY (`user_one`) REFERENCES Users(`id`)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`user_two`) REFERENCES Users(`id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS Recipes (
+  `id`          INT UNSIGNED NOT NULL,
+  `title`       TINYTEXT NOT NULL,
+  `ingredients` TEXT NOT NULL,
+  `image_url`   TINYTEXT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS Favourites (
+  `id`      INT UNSIGNED NOT NULL,
+  `user`    INT UNSIGNED NOT NULL,
+  `recipe`  INT UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`),
+  FOREIGN KEY (`user`) REFERENCES Users(`id`)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`recipe`) REFERENCES Recipes(`id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;

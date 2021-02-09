@@ -1,0 +1,38 @@
+version: "3.4"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    networks:
+      - internal
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=dev
+      - DB_NAME=food_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: /src/
+        target: /api/src
+
+  mysql:
+    image: mysql:8
+    restart: always
+    networks:
+      - internal
+    environment:
+      - MYSQL_DATABASE=food_app
+      - MYSQL_ROOT_PASSWORD=dev
+    volumes:
+      - type: volume
+        source: dev
+        target: /var/lib/mysql
+
+networks:
+  internal:
+
+volumes:
+  dev:

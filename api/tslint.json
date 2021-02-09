@@ -1,0 +1,57 @@
+{
+  "defaultSeverity": "error",
+  "extends": [],
+  "jsRules": {},
+  "rules": {
+    "ban-comma-operator": true,
+    "class-name": true,
+    "encoding": true,
+    "eofline": true,
+    "indent": [true, "spaces", 2],
+    "linebreak-style": [true, "LF"],
+    "no-irregular-whitespace": true,
+    "no-trailing-whitespace": true,
+    "no-var-keyword": true,
+    "no-var-requires": false,
+    "number-literal-format": true,
+    "ordered-imports": [true, {
+      "import-sources-order": "case-insensitive",
+      "named-imports-order": "lowercase-last",
+      "grouped-imports": true,
+      "groups": [
+        "(lodash|react(-.+)?)",
+        "kim-.*",
+        "^[^\\.]",
+        "^\\.\\.\/",
+        ".*"
+      ]
+    }],
+    "semicolon": [true, "always"],
+    "trailing-comma": [true, {
+      "multiline": "never",
+      "singleline": "never"
+    }],
+    "quotemark": [true, "double"],
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "require-const-for-all-caps"
+      ]
+    },
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
+    ]
+  },
+  "rulesDirectory": []
+}
