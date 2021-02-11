@@ -2,4 +2,15 @@ FROM node:13
 WORKDIR /api
 SHELL ["bash", "-ec"]
 
-VOLUME /api/src
+VOLUME /api/src/
+
+# Copy src and configuration files.
+COPY ./makefile /api/makefile
+COPY ./package.json /api/package.json
+COPY ./tsconfig.json /api/tsconfig.json
+COPY ./run /api/run
+
+# Install dependencies.
+RUN make node_modules/;
+
+CMD make monitor;

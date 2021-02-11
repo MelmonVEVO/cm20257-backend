@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    depends_on:
+      - mysql
     networks:
       - internal
     environment:
@@ -15,8 +17,8 @@ services:
       - "8080:8080"
     volumes:
       - type: bind
-        source: /src/
-        target: /api/src
+        source: ./src
+        target: /api/src/
 
   mysql:
     image: mysql:8
