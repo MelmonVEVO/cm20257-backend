@@ -13,7 +13,7 @@ def crawlRecipeList(url, pageList, timeList):
         timeList.append(times.text.replace("\n", "")[:26].strip())
     if soup.find("a", class_="pagination-arrow--next") is not None:
         crawlRecipeList("https://www.bbcgoodfood.com" + soup.find("a", class_="pagination-arrow--next").get("href"),
-                        pageList)
+                        pageList, timeList)
     return pageList, timeList
 
 
@@ -21,7 +21,6 @@ def crawlRecipesInList(url):
     recipeDetails = []
     counter = 0
     recipeList, timesList = crawlRecipeList(url, [], [])
-    print(len(timesList))
     for i in range(len(recipeList)):
         if recipeList[i] in included:
             print(i + 1, "/", len(recipeList))
@@ -49,7 +48,7 @@ def update():
     included = []
     for j in range(len(data["recipes"])):
         included.append(data["recipes"][j]["Link"])
-    recipeDetails = crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/chinese-fakeaway-recipes")
+    recipeDetails = crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/takeaway-favourite-recipes")
     for i in range(len(recipeDetails)):
         try:
             data["recipes"].append(
@@ -65,10 +64,8 @@ data = {"recipes": []}
 update()
 
 
-with open("data.txt", "w") as file:
+with open("example.json", "w") as file:
     json.dump(data, file)
 
 for i in range(len(data["recipes"])):
     print(data["recipes"][i])
-
-# Just need to add data to a csv db now
