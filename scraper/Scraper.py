@@ -23,7 +23,7 @@ def crawlRecipesInList(url):
     recipeList, timesList = crawlRecipeList(url, [], [])
     for i in range(len(recipeList)):
         if recipeList[i] in included:
-            print(i + 1, "/", len(recipeList))
+            print(i + 1, "/", len(recipeList), "skipped")
             pass
         else:
             recipeDetails.append([])
@@ -40,15 +40,6 @@ def crawlRecipesInList(url):
                 ingredientsList.append(ingredients.text)
             recipeDetails[counter].append(ingredientsList)  # Ingredients as a String. Could be changed to an array
             counter += 1
-    return recipeDetails
-
-
-def update():
-    global included
-    included = []
-    for j in range(len(data["recipes"])):
-        included.append(data["recipes"][j]["Link"])
-    recipeDetails = crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/takeaway-favourite-recipes")
     for i in range(len(recipeDetails)):
         try:
             data["recipes"].append(
@@ -58,14 +49,29 @@ def update():
             pass
 
 
+def update():
+    global included
+    included = []
+    for j in range(len(data["recipes"])):
+        included.append(data["recipes"][j]["Link"])
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/takeaway-favourite-recipes")
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/easy-dinner-recipes")
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/comfort-food-recipes")
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/https://www.bbcgoodfood.com"
+                       "/recipes/collection/vegetarian-comfort-food-recipes")
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/five-ingredients-or-less-recipes")
+    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/family-one-pot-recipes")
+
+
 global data
-data = {"recipes": []}
+
+try:
+    with open("recipes.json") as input_file:
+        data = json.load(input_file)
+except FileNotFoundError:
+    data = {"recipes": []}
 
 update()
 
-
-with open("example.json", "w") as file:
-    json.dump(data, file)
-
-for i in range(len(data["recipes"])):
-    print(data["recipes"][i])
+with open("recipes.json", "w") as output_file:
+    json.dump(data, output_file)
