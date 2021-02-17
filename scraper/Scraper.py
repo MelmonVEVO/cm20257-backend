@@ -3,6 +3,16 @@ from urllib.request import Request, urlopen
 import json
 
 
+def getCollections(url):
+    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    sauce = urlopen(req).read()
+    soup = bs.BeautifulSoup(sauce, "lxml")
+    for collections in soup.find_all("a", class_="img-container img-container--square-thumbnail"):
+        if "collection" in collections.get("href"):
+            crawlRecipesInList(collections.get("href"))
+    return
+
+
 def crawlRecipeList(url, pageList, timeList):
     req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
     sauce = urlopen(req).read()
@@ -54,13 +64,7 @@ def update():
     included = []
     for j in range(len(data["recipes"])):
         included.append(data["recipes"][j]["Link"])
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/takeaway-favourite-recipes")
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/easy-dinner-recipes")
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/comfort-food-recipes")
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/https://www.bbcgoodfood.com"
-                       "/recipes/collection/vegetarian-comfort-food-recipes")
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/five-ingredients-or-less-recipes")
-    crawlRecipesInList("https://www.bbcgoodfood.com/recipes/collection/family-one-pot-recipes")
+    getCollections("https://www.bbcgoodfood.com/recipes")
 
 
 global data
