@@ -21,6 +21,18 @@ CREATE TABLE IF NOT EXISTS UserSessions (
     ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
+CREATE TABLE UserFood (
+  `id`            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user`          INT UNSIGNED NOT NULL,
+  `name`          TINYTEXT NOT NULL,
+  `quantity`      DECIMAL (16, 14) NOT NULL,
+  `quantityType`  VARCHAR(15) NOT NULL,
+  `expiryDate`    DATE NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`user`) REFERENCES Users (`id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS Recipes (
   `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `title`       TINYTEXT NOT NULL,

@@ -1,6 +1,6 @@
 import * as bcrypt from "bcrypt";
 
-import { generateToken } from "../token";
+import { TOKEN_SPLIT, generateToken } from "../token";
 import {
   error,
   query,
@@ -40,10 +40,10 @@ export default async function login(req, res) {
     return error(res);
 
   // Generate token to be used for future requests.
-  let token = generateToken(result[0]["id"], result[0]["sign"]);
-  await query(res, SQL_SESSION, [result[0]["id"], token]);
+  let generated = generateToken(result[0]["id"], result[0]["sign"]);
+  await query(res, SQL_SESSION, [result[0]["id"], generated.token]);
 
   send(res, {
-    token: token
+    token: `${generated.token}${TOKEN_SPLIT}${generated.hash}`
   });
 }

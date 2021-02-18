@@ -1,6 +1,19 @@
 import * as crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
+import { mysql } from "../server";
+
+export const TOKEN_SPLIT = ":";
+
+const SQL_VALIDATE = `
+  SELECT
+    UserSessions.\`user\` AS \`user\`,
+    Users.\`sign\` AS \`sign\`
+  FROM UserSessions
+  INNER JOIN Users ON UserSessions.\`user\` = Users.\`id\`
+  WHERE UserSessions.\`token\` = ?;
+`;
+
 function shaHash(...elements: Array<string>): string {
   let hash = crypto.createHash("sha512");
   for (let i = (elements.length - 1); i >= 0; i--)
@@ -9,17 +22,28 @@ function shaHash(...elements: Array<string>): string {
   return hash.digest("hex");
 }
 
-export function generateToken(userId: number, sign: string) {
+export function generateToken(userId: number, sign: string): { hash: string, token: string } {
   let unique = uuidv4();
-  return `${unique}-${shaHash(userId.toString(), sign, unique)}`;
+  return {
+    token: unique,
+    hash: shaHash(userId.toString(), sign, unique)
+  };
 }
 
-export function validToken(token: string, userId: number, sign: string): boolean {
-  let split = token.split("-");
+export async function validToken(token: string): Promise<{ valid: boolean, user?: number }> {
+  let split = token.split(TOKEN_SPLIT);
   if (split.length !== 2)
-    return false;
+    return { valid: false };
 
-  return split[1] === shaHash(userId.toString(), sign, split[0]);
+  let query = await mysql.query(SQL_VALIDATE, [split[0]]);
+  if (!query[0]["user"] || !query[0]["sign"])
+    return { valid: false };
+
+  let valid = split[1] === shaHash(query[0]["user"].toString(), query[0]["sign"], split[0]);
+  return {
+    valid: valid,
+    user: query[0]["user"]
+  };
 }
 
 export function generateSign(): string {
