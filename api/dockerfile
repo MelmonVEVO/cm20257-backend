@@ -10,6 +10,8 @@ COPY ./package.json /api/package.json
 COPY ./tsconfig.json /api/tsconfig.json
 COPY ./run /api/run
 
+COPY ./recipes.json /api/recipes.json
+
 # Install dependencies.
 RUN make node_modules/;
 

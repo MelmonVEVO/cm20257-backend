@@ -36,7 +36,8 @@ CREATE TABLE UserFood (
 CREATE TABLE IF NOT EXISTS Recipes (
   `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `title`       TINYTEXT NOT NULL,
-  `ingredients` TEXT NOT NULL,
+  `time`        TINYTEXT NOT NULL,
+  `ingredients` JSON NOT NULL,
   `image_url`   TINYTEXT NULL,
   `time`        INT NOT NULL,
   `url`         TINYTEXT NOT NULL,
