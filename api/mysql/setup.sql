@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS Recipes (
   `title`       TINYTEXT NOT NULL,
   `time`        TINYTEXT NOT NULL,
   `ingredients` JSON NOT NULL,
-  `image_url`   TINYTEXT NULL,
-  `time`        INT NOT NULL,
+  `imageUrl`   TINYTEXT NULL,
   `url`         TINYTEXT NOT NULL,
   PRIMARY KEY(`id`)
 ) ENGINE = InnoDB;
