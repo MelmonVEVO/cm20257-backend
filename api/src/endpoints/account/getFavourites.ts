@@ -19,5 +19,5 @@ const SQL_GET_FAVOURITES = `
 export default async function getFavourites(req, res) {
   let user = req.user;
   let results = await query(res, SQL_GET_FAVOURITES, user);
-  send(res, results[0]);
+  send(res, results);
 }
