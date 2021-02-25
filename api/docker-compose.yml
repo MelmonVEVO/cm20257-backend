@@ -15,10 +15,6 @@ services:
       - DB_NAME=food_app
     ports:
       - "8080:8080"
-    volumes:
-      - type: bind
-        source: ./src
-        target: /api/src/
 
   mysql:
     build:

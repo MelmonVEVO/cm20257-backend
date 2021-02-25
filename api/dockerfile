@@ -2,7 +2,7 @@ FROM node:13
 WORKDIR /api
 SHELL ["bash", "-ec"]
 
-VOLUME /api/src/
+COPY ./src/ ./src/
 
 # Copy src and configuration files.
 COPY ./makefile /api/makefile
@@ -14,5 +14,6 @@ COPY ./recipes.json /api/recipes.json
 
 # Install dependencies.
 RUN make node_modules/;
+RUN make compile;
 
-CMD make monitor;
+CMD node bin/server.js;
