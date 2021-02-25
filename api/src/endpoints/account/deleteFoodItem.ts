@@ -1,4 +1,7 @@
-import { error, query } from "../utils";
+import {
+  error,
+  query
+} from "../utils";
 
 const SQL_DELETE_ITEM = `
   DELETE FROM UserFood

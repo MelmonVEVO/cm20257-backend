@@ -13,7 +13,7 @@ export function error(res) {
   res.status(500).end();
 }
 
-export async function query(res, query: string, args: Array<string | number> = [], queryRes: boolean = true): Promise<object | null> {
+export async function query(res, query: string, args: Array<string | number> = [], queryRes: boolean = true): Promise<any | null> {
   let batch = `BEGIN;${query}COMMIT;`;
 
   try {
