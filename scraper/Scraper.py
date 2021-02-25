@@ -52,7 +52,7 @@ def crawlRecipesInList(url):
             counter += 1
     for i in range(len(recipeDetails)):
         try:
-            data["recipes"].append(
+            newData["recipes"].append(
                 {"Link": recipeDetails[i][0], "Name": recipeDetails[i][1], "Time": recipeDetails[i][2],
                  "Image": recipeDetails[i][3], "Ingredients": recipeDetails[i][4]})
         except IndexError:
@@ -68,6 +68,7 @@ def update():
 
 
 global data
+global newData
 
 try:
     with open("recipes.json") as input_file:
@@ -75,7 +76,9 @@ try:
 except FileNotFoundError:
     data = {"recipes": []}
 
+newData = {"recipes": []}
+
 update()
 
 with open("recipes.json", "w") as output_file:
-    json.dump(data, output_file)
+    json.dump(newData, output_file)
