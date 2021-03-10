@@ -5,12 +5,13 @@ import * as log from "../logging";
 import createAccount from "./account/createAccount";
 import login from "./account/login";
 import accountRoutes from "./account/routes";
+import followerRoutes from "./followers/routes";
 import recipeRoutes from "./recipes/routes";
+import searchRoutes from "./search/routes";
 import { validToken } from "./token";
 import { error } from "./utils";
 
 let router = Router();
-
 
 // Don't need to be authenticated.
 router.post("/account/login", login);
@@ -38,5 +39,7 @@ router.use(async (req, res, next) => {
 
 router.use("/account", accountRoutes);
 router.use("/recipes", recipeRoutes);
+router.use("/followers", followerRoutes);
+router.use("/search", searchRoutes);
 
 export default router;

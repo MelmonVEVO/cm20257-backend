@@ -13,7 +13,7 @@ export default async function addFavourite(req, res) {
   if (!recipe || recipe <= 0)
     return error(res);
 
-  let result = await query(res, SQL_ADD, [recipe]);
+  let result = await query(res, SQL_ADD, [recipe, req.user]);
 
   send(res, {
     favourite: result[0]["insertId"]
