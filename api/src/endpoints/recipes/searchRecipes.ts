@@ -24,11 +24,12 @@ const SQL_ALL_RECIPES = `
 type Recipe = {
   title: string;
   time: string;
-  ingredients: Array<string>;
+  ingredients: string;
   imageUrl: string;
   url: string;
 };
 
+// Very basic recipe search.
 export default async function searchRecipes(req, res) {
   let user = req.user;
 
@@ -37,26 +38,46 @@ export default async function searchRecipes(req, res) {
   }> = (await query(res, SQL_FOOD, [user]));
   let recipes: Array<Recipe> = (await query(res, SQL_ALL_RECIPES));
 
-  let canMake: Array<Recipe> = [];
+  let canMake: Array<{
+    title: string;
+    time: string;
+    ingredients: Array<{
+      name: string;
+      got: boolean;
+    }>;
+    imageUrl: string;
+    url: string;
+  }> = [];
+
   for (let recipe of recipes) {
-    let canMakeRecipe = true;
-    for (let ingredient of recipe.ingredients) {
+    let canMakeRecipe = false;
+    let ingredients: Array<{ name: string, got: boolean }> = [];
+    for (let ingredient of JSON.parse(recipe.ingredients)) {
       let hasIngredient = false;
       for (let food of userFood) {
-        if (!ingredient.toLowerCase().includes(food.name.toLowerCase()))
-          continue;
+        if (ingredient.toLowerCase().includes(food.name.toLowerCase())) {
+          hasIngredient = true;
+          break;
+        }
+      }
 
-        hasIngredient = true;
-        break;
-      }
-      if (!hasIngredient) {
-        canMakeRecipe = false;
-        break;
-      }
+      if (hasIngredient)
+        canMakeRecipe = true;
+
+      ingredients.push({
+        name: ingredient,
+        got: hasIngredient
+      });
     }
 
     if (canMakeRecipe)
-      canMake.push(recipe);
+      canMake.push({
+        title: recipe.title,
+        time: recipe.time,
+        ingredients: ingredients,
+        imageUrl: recipe.imageUrl,
+        url: recipe.url
+      });
   }
 
   send(res, {
